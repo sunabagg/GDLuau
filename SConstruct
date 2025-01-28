@@ -126,6 +126,21 @@ if env["platform"] == "macos":
 
 libraryfile = "bin/{}/{}".format(env["platform"], file)
 
+# Add this function to filter out the incompatible flag
+def filter_incompatible_flags(env):
+    if env['platform'] == 'web' and env['arch'] == 'wasm32':
+        env['CCFLAGS'] = [flag for flag in env['CCFLAGS'] if '-wasm-enable-sjlj' not in flag]
+        env['CXXFLAGS'] = [flag for flag in env['CXXFLAGS'] if '-wasm-enable-sjlj' not in flag]
+
+# Call the function after setting up the environment
+filter_incompatible_flags(env)
+
+if env["platform"] == "web":
+    #env.Append(CXXFLAGS=["-s", "DISABLE_EXCEPTION_CATCHING=0"])
+    #env.Append(CCFLAGS=["-s", "DISABLE_EXCEPTION_CATCHING=0"])
+    env.Append(CXXFLAGS=["-fwasm-exceptions"])
+    env.Append(CCFLAGS=["-fwasm-exceptions"])
+
 # env.Append(CXXFLAGS=["-g"])
 env.Append(CXXFLAGS=["-fexceptions"])
 library = env.SharedLibrary(
