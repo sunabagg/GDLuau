@@ -3,7 +3,7 @@
 
 luau/*.obj
 luau/*.o
-cache/*
+.cache/*
 
 # Ignore library files but not the gdextension file
 demo/addons/gdluau/bin/*
